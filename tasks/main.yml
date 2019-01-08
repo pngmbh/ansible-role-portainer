@@ -44,7 +44,7 @@
     method: POST
     return_content: yes
     body_format: json
-    body: { "Username":"{{ admin_user }}", "Password":"{{ admin_password }}"}
+    body: '{ "Username":"{{ admin_user }}", "Password":"{{ admin_password }}"}'
     status_code: 200, 409
   when: admin_user and admin_password is defined
 
@@ -54,34 +54,27 @@
     method: POST
     return_content: yes
     body_format: json
-    body: {"Username": "{{ admin_user }}", "Password": "{{ admin_password }}"}
+    body: '{"Username": "{{ admin_user }}", "Password": "{{ admin_password }}"}'
   register: auth_token
   when: admin_user and admin_password is defined
 
 - name: Define Endpoints
-  command:
+  shell: |
+    curl --silent --show-error -o /dev/null -w "%{http_code}" {{ portainer_endpoint }}/endpoints \
+      -H "Authorization: Bearer {{ (auth_token.content|from_json).jwt }}" \
+      -F "Name={{ item.name }}" \
+      -F "URL={{ item.url }}" \
+      -F "EndpointType=1"
   args:
-    argv:
-      - curl
-      - -o
-      - -
-      - -w
-      - "\n%{http_code}\n"
-      - "{{ portainer_endpoint }}/endpoints"
-      - -H
-      - "Authorization: Bearer {{ (auth_token.content|from_json).jwt }}"
-      - -F
-      - "Name={{ item.name }}"
-      - -F
-      - "URL={{ item.url }}"
-      - -F
-      - "EndpointType=1"
-    warn: false
+    warn: False
   with_items:
     - "{{ endpoints | list }}"
   when: endpoints is defined
-  register: result
-  failed_when: result.stdout.find("200") != -1
+  register: response
+  #failed_when: response.stdout.find("200") != -1
+
+- name: "TESTING, TEST"
+  debug: msg="{{ response }}"
 
 - name: Configure Portainer settings
   uri:
