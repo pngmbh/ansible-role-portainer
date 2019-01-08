@@ -1,0 +1,44 @@
+---
+- name: Generate authentication token
+  uri:
+    url: "{{ portainer_endpoint }}/auth"
+    method: POST
+    return_content: yes
+    body_format: json
+    body: '{"Username": "{{ admin_user }}", "Password": "{{ admin_password }}"}'
+  register: auth_token
+  when: admin_user and admin_password is defined
+
+- name: Get Endpoints
+  uri:
+    url: "{{ portainer_endpoint }}/endpoints"
+    method: GET
+    return_content: yes
+    headers:
+      Authorization: Bearer {{ (auth_token.content|from_json).jwt }}
+  register: portainer_known_endpoints_raw
+
+- name: Save endpoints as fact 
+  set_fact:
+    portainer_known_endpoints: "{{ portainer_known_endpoints_raw.json | map(attribute='Name') | list }}"
+
+- name: "EHLO endpoints"
+  debug: msg="{{ portainer_known_endpoints }}"
+
+- name: Define Endpoints
+  shell: |
+    curl --silent --show-error -o /dev/null -w "%{http_code}" {{ portainer_endpoint }}/endpoints \
+      -H "Authorization: Bearer {{ (auth_token.content|from_json).jwt }}" \
+      -F "Name={{ item.name }}" \
+      -F "URL={{ item.url }}" \
+      -F "EndpointType=1"
+  args:
+    warn: False
+  with_items:
+    - "{{ endpoints | list }}"
+  when: item not in portainer_known_endpoints
+  register: response
+  #failed_when: response.stdout.find("200") != -1
+
+- name: "TESTING, TEST"
+  debug: msg="{{ response }}"
