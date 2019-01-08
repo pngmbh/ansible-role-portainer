@@ -63,7 +63,10 @@
   args:
     argv:
       - curl
-      - -f
+      - -o
+      - -
+      - -w
+      - "\n%{http_code}\n"
       - "{{ portainer_endpoint }}/endpoints"
       - -H
       - "Authorization: Bearer {{ (auth_token.content|from_json).jwt }}"
@@ -73,9 +76,12 @@
       - "URL={{ item.url }}"
       - -F
       - "EndpointType=1"
+    warn: false
   with_items:
     - "{{ endpoints | list }}"
   when: endpoints is defined
+  register: result
+  failed_when: result.stdout.find("200") != -1
 
 - name: Configure Portainer settings
   uri:
