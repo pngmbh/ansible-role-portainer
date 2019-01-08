@@ -9,8 +9,8 @@
   docker_container:
     name: portainer
     state: absent
-    purge_networks: yes
-    force_kill: yes
+    purge_networks: true
+    force_kill: true
   when: remove_existing_container
 
 - name: Remove persistent data
@@ -25,7 +25,7 @@
     image: "portainer/portainer:{{ version }}"
     state: started
     detach: true
-    recreate: yes
+    recreate: true
     restart_policy: always
     published_ports:
       - "{{ host_port }}:9000"
@@ -42,7 +42,7 @@
   uri:
     url: "{{ portainer_endpoint }}/users/admin/init"
     method: POST
-    return_content: yes
+    return_content: true
     body_format: json
     body: { "Username":"{{ admin_user }}", "Password":"{{ admin_password }}"}
     status_code: 200, 409
@@ -52,7 +52,7 @@
   uri:
     url: "{{ portainer_endpoint }}/auth"
     method: POST
-    return_content: yes
+    return_content: true
     body_format: json
     body: {"Username": "{{ admin_user }}", "Password": "{{ admin_password }}"}
   register: auth_token
@@ -87,7 +87,7 @@
   uri:
     url: "{{ portainer_endpoint }}/settings"
     method: PUT
-    return_content: yes
+    return_content: true
     headers:
       Authorization: "{{ (auth_token.content|from_json).jwt }}"
     body_format: json
@@ -98,7 +98,7 @@
   uri:
     url: "{{ portainer_endpoint }}/registries"
     method: POST
-    return_content: yes
+    return_content: true
     headers:
       Authorization: "{{ (auth_token.content|from_json).jwt }}"
     body_format: json

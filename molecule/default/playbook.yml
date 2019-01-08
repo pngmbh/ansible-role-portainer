@@ -2,4 +2,16 @@
 - name: Converge
   hosts: all
   roles:
+    - role: geerlingguy.repo-epel
+    - role: geerlingguy.pip
     - role: ansible-role-portainer
+  vars:
+    pip_install_packages:
+      - name: docker-py
+    persistent_data_path: /opt/pngmbh/portainer:/data
+    company_logo_url: https://www.planetary-networks.de/wp-content/uploads/2014/07/logo_2.png
+    # portainer_endpoint: "http://portainer-mgmt.docker.planetary-networks.de:{{ host_port }}/api"
+    admin_user: pn
+    admin_password: foo
+    endpoints:
+      - {name: portainer-mgmt, url: "unix:///var/run/docker.sock"}
