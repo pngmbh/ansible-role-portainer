@@ -1,3 +1,4 @@
+---
 - name: Configure admin user password
   uri:
     url: "{{ portainer_endpoint }}/users/admin/init"
