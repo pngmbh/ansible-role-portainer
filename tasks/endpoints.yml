@@ -36,7 +36,7 @@
     warn: False
   with_items:
     - "{{ endpoints | list }}"
-  when: item not in portainer_known_endpoints
+  when: item.name not in portainer_known_endpoints
   register: response
   #failed_when: response.stdout.find("200") != -1
 
