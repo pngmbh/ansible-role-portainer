@@ -22,7 +22,7 @@
   set_fact:
     portainer_known_endpoints: "{{ portainer_known_endpoints_raw.json | map(attribute='Name') | list }}"
 
-- name: "EHLO endpoints"
+- name: "Show known endpoints"
   debug: msg="{{ portainer_known_endpoints }}"
 
 - name: Define Endpoints
@@ -40,5 +40,5 @@
   register: response
   #failed_when: response.stdout.find("200") != -1
 
-- name: "TESTING, TEST"
-  debug: msg="{{ response }}"
+#- name: "TESTING, TEST"
+#  debug: msg="{{ response }}"
