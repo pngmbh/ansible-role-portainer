@@ -11,8 +11,8 @@ container_restart_policy: always
 container_recreate: false
 auth_method: 1
 
-# Portainer version
-version: latest
+portainer_image: portainer/portainer
+portainer_version: latest
 
 # Misc settings
 company_logo_url: 'url_to_company_logo'

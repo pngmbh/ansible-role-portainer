@@ -2,7 +2,7 @@
 - name: "Deploy Portainer to {{ inventory_hostname }}"
   docker_container:
     name: portainer
-    image: "portainer/portainer:{{ version }}"
+    image: "{{ portainer_image }}:{{ portainer_version }}"
     labels: "{{ container_labels | default(omit) }}"
     state: started
     detach: true
