@@ -5,7 +5,6 @@ Portainer - the coolest UI for Docker http://portainer.io/
 This role installs Portainer using Docker container
 
 ## Tasks in Role
-- Ensure docker-py is present using pip
 - Remove existing container [if ```remove_existing_container: true```]
 - Remove persistent data [if ```remove_persistent_data: true```]
 - Deploy Portainer container to host [define persistent_data_path]
