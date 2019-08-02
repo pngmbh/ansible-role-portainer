@@ -21,7 +21,10 @@
       -H "Authorization: Bearer {{ (auth_token.content|from_json).jwt }}" \
       -F "Name={{ item.name }}" \
       -F "URL={{ item.url }}" \
-      -F "EndpointType={{ item.type | default(1) }}"
+      -F "EndpointType={{ item.type | default(1) }}" \
+      -F "TLS={{ item.tls | default('false') }}" \
+      -F "TLSSkipVerify={{ item.tlsSkipVerify | default('false') }}" \
+      -F "TLSSkipClientVerify={{ item.tlsSkipClientVerify | default('false') }}"
   args:
     warn: false
   with_items:
