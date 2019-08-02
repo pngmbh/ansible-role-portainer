@@ -7,7 +7,7 @@
     - role: geerlingguy.docker
   vars:
     pip_install_packages:
-      - name: docker
+      - name: docker-py
 - name: Converge
   hosts: all
   roles:
