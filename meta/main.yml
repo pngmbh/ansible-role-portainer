@@ -15,7 +15,7 @@ galaxy_info:
         - xenial
   galaxy_tags:
     - development
-    - continuous-integration
-    - CI
+    - continuousintegration
+    - ci
 
 dependencies: []
