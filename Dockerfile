@@ -1,2 +1,2 @@
-FROM quay.io/ansible/molecule:latest
-RUN sudo pip install docker-py
+FROM quay.io/ansible/molecule:2.20.2
+RUN pip install docker
