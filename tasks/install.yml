@@ -4,6 +4,7 @@
     name: portainer
     image: "{{ portainer_image }}:{{ portainer_version }}"
     labels: "{{ container_labels | default(omit) }}"
+    env: "{{ container_environment | default(omit) }}"
     state: started
     detach: true
     recreate: "{{ container_recreate }}"

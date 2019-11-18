@@ -1,2 +1,2 @@
-FROM quay.io/ansible/molecule:2.20.2
+FROM quay.io/ansible/molecule:2.22
 RUN pip install docker
